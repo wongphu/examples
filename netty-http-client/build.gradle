@@ -1,0 +1,19 @@
+plugins {
+  id 'java'
+  id 'application'
+}
+
+sourceCompatibility = 1.8
+
+application {
+  mainClassName = 'Main'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'io.netty:netty-all:4.1.43.Final'
+  implementation 'ch.qos.logback:logback-classic:1.2.3'
+}
