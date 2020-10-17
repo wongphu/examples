@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF8">
+  <title>Elm + Websockets</title>
+  <script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+  <div id="myapp"></div>
+</body>
+<script type="text/javascript">
+var app = Elm.Main.init({
+  node: document.getElementById('myapp')
+});
+
+var socket = new WebSocket('wss://echo.websocket.org');
+app.ports.sendMessage.subscribe(function(message) {
+  console.log("sending: " + message);
+  socket.send(message);
+});
+socket.onmessage = function(event) {
+  console.log("received: " + event.data);
+  app.ports.messageReceiver.send(event.data);
+};
+socket.onopen = function(event) {
+  console.log("CONNECTED");
+  app.ports.messageReceiver.send("CONNECTED");
+};
+socket.onclose = function(event) {
+  console.log("DISCONNECTED");
+  app.ports.messageReceiver.send("DISCONNECTED");
+};
+socket.onerror = function(event) {
+  console.log("ERROR");
+  app.ports.messageReceiver.send("ERROR");
+};
+console.log("INITIALIZED");
+</script>
+</html>
